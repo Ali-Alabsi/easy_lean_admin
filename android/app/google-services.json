@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "492868721154",
+    "project_id": "teastlearingapp",
+    "storage_bucket": "teastlearingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492868721154:android:13dcc724cb4b7385baa51b",
+        "android_client_info": {
+          "package_name": "com.example.ddd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTQd5U5ByuuQA8VPS8Ry8LPwnci_YXekI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492868721154:android:484c2efb1f298912baa51b",
+        "android_client_info": {
+          "package_name": "com.example.easy_lean_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTQd5U5ByuuQA8VPS8Ry8LPwnci_YXekI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492868721154:android:eabfd2111345e917baa51b",
+        "android_client_info": {
+          "package_name": "com.example.learning_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTQd5U5ByuuQA8VPS8Ry8LPwnci_YXekI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
