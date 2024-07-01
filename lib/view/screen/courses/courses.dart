@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import '../../core/shared/theming/text_style.dart';
+import '../../../controller/layout_controller.dart';
+import '../../../core/shared/theming/text_style.dart';
+import 'courses_details.dart';
 
 class Courses extends StatelessWidget {
   const Courses({Key? key}) : super(key: key);
@@ -152,76 +154,84 @@ class CardItemCoursesInCoursesPage extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      InkWell(
-                        onTap: () {},
-                        child: Row(
-                          children: [
-                            Column(
+                      GetBuilder<LayoutController>(
+                        init: LayoutController(),
+                        builder: (controllerLayout) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(context,
+                              CupertinoPageRoute(builder: (context) => CoursesDetails(courseId: 'ss',)));
+                            },
+                            child: Row(
                               children: [
-                                Text(
-                                  'تفاصيل',
-                                  style: TextStyles.font16mainColorBold,
-                                ),
-                                Container(
-                                  height: 1,
-                                  width: 50,
-                                  color: ProjectColors.greyColor,
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              width: maxWidth / 40,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                controller.updateActive(
-                                    context,
-                                    snapshot.data.docs[index].id,
-                                    snapshot.data.docs[index].data()['active']);
-                              },
-                              child: Container(
-                                width: 70,
-                                child: Column(
+                                Column(
                                   children: [
                                     Text(
-                                      snapshot.data.docs[index].data()['active']
-                                          ? 'تقيد'
-                                          : 'فك التقيد',
-                                      style: TextStyles.font16greenColorBold,
+                                      'تفاصيل',
+                                      style: TextStyles.font16mainColorBold,
                                     ),
                                     Container(
                                       height: 1,
-                                      width: double.infinity,
+                                      width: 50,
                                       color: ProjectColors.greyColor,
                                     )
                                   ],
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: maxWidth / 40,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                controller.deleteCourse(
-                                    context, snapshot.data.docs[index].id);
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'حذف',
-                                    style: TextStyles.font16redColorBold,
+                                SizedBox(
+                                  width: maxWidth / 40,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    controller.updateActive(
+                                        context,
+                                        snapshot.data.docs[index].id,
+                                        snapshot.data.docs[index].data()['active']);
+                                  },
+                                  child: Container(
+                                    width: 70,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          snapshot.data.docs[index].data()['active']
+                                              ? 'تقيد'
+                                              : 'فك التقيد',
+                                          style: TextStyles.font16greenColorBold,
+                                        ),
+                                        Container(
+                                          height: 1,
+                                          width: double.infinity,
+                                          color: ProjectColors.greyColor,
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  Container(
-                                    height: 1,
-                                    width: 35,
-                                    color: ProjectColors.greyColor,
-                                  )
-                                ],
-                              ),
+                                ),
+                                SizedBox(
+                                  width: maxWidth / 40,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    controller.deleteCourse(
+                                        context, snapshot.data.docs[index].id);
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'حذف',
+                                        style: TextStyles.font16redColorBold,
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        width: 35,
+                                        color: ProjectColors.greyColor,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        }
                       )
                     ],
                   )

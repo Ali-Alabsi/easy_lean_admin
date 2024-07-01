@@ -61,6 +61,9 @@ class NavigationBarInLayoutPage extends StatelessWidget {
                   icon: Icons.apps,
                 ),
                 ItemCategories(
+                  onTap: (){
+                    controller.changeIndexScreen(4);
+                  },
                   name: 'الطلاب',
                   active: controller.indexScreen == 4?true: false,
                   icon: Icons.account_box,
