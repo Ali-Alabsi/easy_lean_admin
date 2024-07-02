@@ -9,7 +9,7 @@ import '../view/screen/project.dart';
 import '../view/screen/teacher.dart';
 
 class LayoutController extends GetxController{
-  int indexScreen =4;
+  int indexScreen =0;
   List<Widget> screen=[
     Home(),
     Courses(),

@@ -1,15 +1,12 @@
 import 'dart:ui';
 
+import 'package:easy_lean_admin/view/screen/courses/courses_details.dart';
 import 'package:easy_lean_admin/view/screen/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'firebase_options.dart';
 import 'view/screen/home.dart';
 import 'view/screen/layout.dart';
-
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Layout(),
+      home: Login(),
     );
   }
 }

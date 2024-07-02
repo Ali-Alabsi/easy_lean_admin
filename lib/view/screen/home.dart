@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import '../../core/shared/theming/text_style.dart';
 import '../../core/widget/searchAndNameInLayoutPage.dart';
 import '../widget/home_widget.dart';
+
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 

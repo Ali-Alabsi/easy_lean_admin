@@ -3,7 +3,6 @@ import 'package:easy_lean_admin/core/shared/controller.dart';
 import 'package:easy_lean_admin/core/widget/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../core/shared/color.dart';
 import '../../core/shared/theming/text_style.dart';
 import '../../core/widget/app_text_form_filed.dart';

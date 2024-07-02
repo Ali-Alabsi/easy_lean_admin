@@ -7,6 +7,8 @@ import '../core/widget/awesome_dialog.dart';
 class CoursesController extends GetxController {
   CollectionReference dataCourses =
       FirebaseFirestore.instance.collection('courses');
+  CollectionReference dataTeacher = FirebaseFirestore.instance.collection('teachers');
+  CollectionReference dataReview = FirebaseFirestore.instance.collection('review');
 
   Future<void> updateActive(context, String id, bool active) {
     return dataCourses
@@ -21,6 +23,15 @@ class CoursesController extends GetxController {
 
   void deleteCourse(context , String id) async {
     await dataCourses.doc(id).delete().whenComplete(() {
+      update();
+      snackBarDialog(context, 'تم العملية  الحذف بنجاح');
+    }).onError((error, stackTrace) {
+      snackBarDialog(context, ' هناك خطاء لم تتم عملية الحذف');
+    });
+  }
+
+  void deleteReview(context , String id) async {
+    await dataReview.doc(id).delete().whenComplete(() {
       update();
       snackBarDialog(context, 'تم العملية  الحذف بنجاح');
     }).onError((error, stackTrace) {
