@@ -1,21 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_lean_admin/controller/student_controller.dart';
-import 'package:easy_lean_admin/view/screen/student/student_details.dart';
+import 'package:easy_lean_admin/view/screen/teacher/teacher_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/teacher_controller.dart';
+import '../../../controller/student_controller.dart';
 import '../../../core/shared/color.dart';
 import '../../../core/shared/theming/text_style.dart';
 import '../../../core/widget/image_cache_error.dart';
 import '../courses/courses_details.dart';
 
-class TeacherDetails extends StatelessWidget {
-  final String teacherId;
+class StudentDetails extends StatelessWidget {
+  final String studentId;
 
-  const TeacherDetails({Key? key, required this.teacherId}) : super(key: key);
+  const StudentDetails({Key? key, required this.studentId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +32,19 @@ class TeacherDetails extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('تفاصيل المعلمين',style: TextStyles.font24BlackW600,),
-                      SizedBox(height: 15,),
+                      Text('تفاصيل الطلاب',style: TextStyles.font24BlackW600,),
+                      SizedBox(height: 20,),
                       Row(
                         children: [
                           ListItemCourseOfTeacherDetailsPage(
-                            teacherId: teacherId,
+                            studentId: studentId,
                             maxWidth: maxWidth,
                             maxHeight: maxHeight,
                           ),
-                          InfoOfTeacherInTeacherDetailsPage(
+                          InfoOfStudentInStudentDetailsPage(
                             height: maxHeight,
                             width: maxWidth,
-                            teacherId: teacherId,
+                            studentId: studentId,
                           )
                         ],
                       ),
@@ -54,12 +53,13 @@ class TeacherDetails extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 1,
-                              child: ListItemStudentInDetailsCourses(teacherId: teacherId,),
+                              child: ListItemTeacherInDetailsStudentPage(studentId: studentId,),
                             ),
                             SizedBox(width: 30,),
                             Expanded(
                               flex: 2,
-                              child: ListItemReviewStudentOfTeacherDetailsPage(teacherId: teacherId,maxWidth: maxWidth,),)
+                              child: ListItemReviewStudentOfStudentDetailsPage(maxWidth: maxWidth,studentId: studentId,),
+                      )
                           ],
                         ),
                       )
@@ -75,60 +75,69 @@ class TeacherDetails extends StatelessWidget {
   }
 }
 
-class ListItemStudentInDetailsCourses extends StatelessWidget {
-  final String teacherId;
-  const ListItemStudentInDetailsCourses({
-    super.key, required this.teacherId,
+
+class ListItemTeacherInDetailsStudentPage extends StatelessWidget {
+  final String studentId;
+  const ListItemTeacherInDetailsStudentPage({
+    super.key, required this.studentId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<TeacherController>(
-      init: TeacherController(),
-      builder: (controller) {
-        return FutureBuilder(
-          future: controller.dataStudentCourses.where('teacher_id', isEqualTo: teacherId).get(),
-          builder: (context ,snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.docs.length > 0) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 40,),
-                      Text('الطلاب الخاصة بهذا المعلم', style: TextStyles.font18mainColorBold,),
-                      SizedBox(height: 15),
-                      Expanded(
-                        child: ListView.separated(
-                            itemBuilder: (context , index){
-                              return CardItemStudentInDetailsCourses(snapshot: snapshot,index: index,);
+    return GetBuilder<StudentController>(
+        init: StudentController(),
+        builder: (controller) {
+          return FutureBuilder(
+              future: controller.dataStudentCourses.where('student_id', isEqualTo: studentId).get(),
+            builder: (context,snapshotTeacher) {
+              if (snapshotTeacher.connectionState == ConnectionState.done) {
+                if (snapshotTeacher.hasData) {
+                 return Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     SizedBox(height: 40,),
+                     Text( 'اسماء المعلمين الذي سبق الدراسة معهم', style: TextStyles.font18mainColorBold,),
+                     SizedBox(height: 15),
+                     Expanded(
+                       child: ListView.separated(
+                            itemBuilder: (context,i){
+                              return FutureBuilder(
+                                  future: controller.dataTeacher.doc(snapshotTeacher.data!.docs[i]['teacher_id']).get(),
+                                  builder: (context ,snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      if (snapshot.hasData) {
+                                        return CardItemTeacherInDetailsStudentPage(snapshot: snapshot,index: i,);
+                                      } else {
+                                        return Center(child: CircularProgressIndicator());
+                                      }
+                                    } else {
+                                      return Center(child: CircularProgressIndicator());
+                                    }
+                                  }
+                              );
                             }, separatorBuilder: (context , index){
-                          return SizedBox(height: 20,);
-                        }, itemCount: snapshot.data!.docs.length),
-                      )
-
-                    ],
-                  );
+                              return SizedBox(width: 10,);
+                        }, itemCount: snapshotTeacher.data!.docs.length),
+                     ),
+                   ],
+                 );
                 } else {
-                  return Text('لا يوجد طلاب   لهذا المعلم  ');
+                  return Center(child: CircularProgressIndicator());
                 }
               } else {
                 return Center(child: CircularProgressIndicator());
               }
-            } else {
-              return Center(child: CircularProgressIndicator());
             }
-          }
-        );
-      }
+          );
+        }
     );
   }
 }
 
-class CardItemStudentInDetailsCourses extends StatelessWidget {
-  final AsyncSnapshot<QuerySnapshot<Object?>> snapshot;
+class CardItemTeacherInDetailsStudentPage extends StatelessWidget {
+  final AsyncSnapshot<DocumentSnapshot<Object?>> snapshot;
   final int index;
-  const CardItemStudentInDetailsCourses({
+  const CardItemTeacherInDetailsStudentPage({
     super.key,required this.snapshot, required this.index,
   });
 
@@ -149,19 +158,19 @@ class CardItemStudentInDetailsCourses extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: ProjectColors.mainColor,
                         borderRadius:
-                            BorderRadius.circular(10)),
-                    child: ImageNetworkCache(url:  snapshot.data!.docs[index]['student_image'])),
+                        BorderRadius.circular(10)),
+                    child: ImageNetworkCache(url:  snapshot.data!['image'])),
                 SizedBox(
                   width: 20,
                 ),
                 Column(
                   crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  CrossAxisAlignment.start,
                   mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                  MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      snapshot.data!.docs[index]['student_name'],
+                      snapshot.data!['name'],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyles.font16mainColorBold,
@@ -170,7 +179,7 @@ class CardItemStudentInDetailsCourses extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      snapshot.data!.docs[index]['student_email'],
+                      snapshot.data!['email'],
                       style: TextStyles.font16GreyW400,
                     ),
                   ],
@@ -181,16 +190,18 @@ class CardItemStudentInDetailsCourses extends StatelessWidget {
             InkWell(
               onTap: (){
                 Navigator.push(context,
-                CupertinoPageRoute(builder: (context) => StudentDetails(studentId: snapshot.data!.docs[index]['student_id'])));
+                CupertinoPageRoute(builder: (context) {
+                  return TeacherDetails(teacherId: snapshot.data!.id);
+                }));
               },
               child: CircleAvatar(
-                radius: 30,
+                  radius: 30,
                   child: Icon(
                     size: 30,
-                Icons.arrow_back_outlined,
-                color: ProjectColors.mainColor,
-                textDirection: TextDirection.ltr,
-              )),
+                    Icons.arrow_back_outlined,
+                    color: ProjectColors.mainColor,
+                    textDirection: TextDirection.ltr,
+                  )),
             ),
           ],
         ),
@@ -200,12 +211,12 @@ class CardItemStudentInDetailsCourses extends StatelessWidget {
 }
 
 class ListItemCourseOfTeacherDetailsPage extends StatelessWidget {
-  final String teacherId;
+  final String studentId;
 
   const ListItemCourseOfTeacherDetailsPage({
     super.key,
     required this.maxWidth,
-    required this.teacherId,
+    required this.studentId,
     required this.maxHeight,
   });
 
@@ -215,12 +226,12 @@ class ListItemCourseOfTeacherDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: GetBuilder<TeacherController>(
-            init: TeacherController(),
+        child: GetBuilder<StudentController>(
+            init: StudentController(),
             builder: (controller) {
               return FutureBuilder(
-                  future: controller.dataCourse
-                      .where('teacher_id', isEqualTo: teacherId)
+                  future: controller.dataStudentCourses
+                      .where('student_id', isEqualTo: studentId)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -235,7 +246,7 @@ class ListItemCourseOfTeacherDetailsPage extends StatelessWidget {
                                     Column(
                                       children: [
                                         Text(
-                                          'الكورسات الخاص بالمعلم ',
+                                          '  الكورسات الذي تم درستها ',
                                           style: TextStyles.font18mainColorBold,
                                         ),
                                       ],
@@ -279,7 +290,7 @@ class ListItemCourseOfTeacherDetailsPage extends StatelessWidget {
                       return Center(child: CircularProgressIndicator());
                     }
                   }
-                  );
+              );
             }));
   }
 }
@@ -287,7 +298,7 @@ class ListItemCourseOfTeacherDetailsPage extends StatelessWidget {
 class CardItemCoursesOPfTeacherDetailsPage extends StatelessWidget {
   final AsyncSnapshot<QuerySnapshot<Object?>> snapshot;
   final int index;
-  final TeacherController controller;
+  final StudentController controller;
 
   const CardItemCoursesOPfTeacherDetailsPage({
     super.key,
@@ -303,98 +314,111 @@ class CardItemCoursesOPfTeacherDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      child: Container(
-        width: maxWidth / 4.5,
-        height: maxHeight / 3,
-        padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Row(
+    return FutureBuilder(
+      future: controller.dataCourse.doc(snapshot.data!.docs[index]['courses_id']).get(),
+      builder: (context,snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return Card(
+              elevation: 10,
+              child: Container(
+                width: maxWidth / 4.5,
+                height: maxHeight / 3,
+                padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                          color: ProjectColors.mainColor,
-                          borderRadius: BorderRadius.circular(23),
-                        ),
-                        child: ImageNetworkCache(
-                          url: snapshot.data!.docs[index]['image'],
-                        ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 45,
+                                width: 45,
+                                decoration: BoxDecoration(
+                                  color: ProjectColors.mainColor,
+                                  borderRadius: BorderRadius.circular(23),
+                                ),
+                                child: ImageNetworkCache(
+                                  url: snapshot.data!['image'],
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  snapshot.data!['name'],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyles.font16mainColorBold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            snapshot.data!['details'],
+                            maxLines: 4,
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        width: 10,
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: Size(maxWidth / 5, 40),
+                                maximumSize: Size(maxWidth / 5, 40),
+                                side: BorderSide(
+                                  color: ProjectColors.greenColor,
+                                  width: 1,
+                                )),
+                            child: Text('تفاصيل'),
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return CoursesDetails(
+                                        courseId: snapshot.data!.id);
+                                  }));
+                            },
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Text(
-                          snapshot.data!.docs[index]['name'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyles.font16mainColorBold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    snapshot.data!.docs[index]['details'],
-                    maxLines: 4,
-                  ),
-                ],
+                    ]),
               ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(maxWidth / 5, 40),
-                        maximumSize: Size(maxWidth / 5, 40),
-                        side: BorderSide(
-                          color: ProjectColors.greenColor,
-                          width: 1,
-                        )),
-                    child: Text('تفاصيل'),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return CoursesDetails(
-                            courseId: snapshot.data!.docs[index].id);
-                      }));
-                    },
-                  ),
-                ],
-              ),
-            ]),
-      ),
+            );
+          } else {
+            return Center(child: SizedBox());
+          }
+        } else {
+          return Center(child: SizedBox());
+        }
+      }
     );
   }
 }
 
-class InfoOfTeacherInTeacherDetailsPage extends StatelessWidget {
+class InfoOfStudentInStudentDetailsPage extends StatelessWidget {
   final double width;
   final double height;
-  final String teacherId;
+  final String studentId;
 
-  const InfoOfTeacherInTeacherDetailsPage({
+  const InfoOfStudentInStudentDetailsPage({
     super.key,
     required this.width,
     required this.height,
-    required this.teacherId,
+    required this.studentId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<TeacherController>(
-        init: TeacherController(),
+    return GetBuilder<StudentController>(
+        init: StudentController(),
         builder: (controller) {
           return FutureBuilder(
-              future: controller.dataTeacher.doc(teacherId).get(),
+              future: controller.dataStudents.doc(studentId).get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
@@ -413,36 +437,38 @@ class InfoOfTeacherInTeacherDetailsPage extends StatelessWidget {
                                 ),
                                 child: Container(
                                   padding: EdgeInsetsDirectional.symmetric(
-                                      vertical: 10),
+                                      vertical: 10,
+                                    horizontal: 20
+                                  ),
                                   child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Column(
                                           children: [
                                             SizedBox(
                                               height: 60,
                                             ),
-                                            Text(snapshot.data!['name']),
+                                            Text(snapshot.data!['username']),
                                             SizedBox(
                                               height: 5,
                                             ),
                                             Text(
-                                              "المعلم / ${snapshot.data!['email']}",
+                                              snapshot.data!['email'],
                                               style: TextStyles.font14GreyW300,
                                             ),
                                           ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceAround,
                                           children: [
                                             Column(
                                               children: [
                                                 Text(
                                                   'عدد الكورسات',
                                                   style:
-                                                      TextStyles.font14GreyW300,
+                                                  TextStyles.font14GreyW300,
                                                 ),
                                                 Text(
                                                   '1',
@@ -456,19 +482,22 @@ class InfoOfTeacherInTeacherDetailsPage extends StatelessWidget {
                                               height: 70,
                                               color: ProjectColors.whiteColor,
                                             ),
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  'work',
-                                                  style:
-                                                      TextStyles.font14GreyW300,
-                                                ),
-                                                Text(
-                                                  snapshot.data!['work'],
-                                                  style: TextStyles
-                                                      .font18BlackBold,
-                                                )
-                                              ],
+                                            Expanded(
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    'رقم الهاتف',
+                                                    style:
+                                                    TextStyles.font14GreyW300,
+                                                  ),
+                                                  Text(
+                                                    snapshot.data!['phone'],
+                                                    maxLines: 1,
+                                                    style: TextStyles
+                                                        .font18BlackBold,
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         )
@@ -483,7 +512,7 @@ class InfoOfTeacherInTeacherDetailsPage extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         color: ProjectColors.mainColor,
                                         borderRadius:
-                                            BorderRadius.circular(50)),
+                                        BorderRadius.circular(50)),
                                     child: ImageNetworkCache(
                                       url: snapshot.data!['image'],
                                     )),
@@ -511,23 +540,22 @@ class InfoOfTeacherInTeacherDetailsPage extends StatelessWidget {
 }
 
 
-class ListItemReviewStudentOfTeacherDetailsPage extends StatelessWidget {
-  final String teacherId;
-
-  const ListItemReviewStudentOfTeacherDetailsPage({
+class ListItemReviewStudentOfStudentDetailsPage extends StatelessWidget {
+  final String studentId;
+  const ListItemReviewStudentOfStudentDetailsPage({
     super.key,
     required this.maxWidth,
-    required this.teacherId,
+    required this.studentId,
   });
 
   final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: GetBuilder<TeacherController>(builder: (controller) {
+    return Expanded(child: GetBuilder<StudentController>(builder: (controller) {
       return FutureBuilder(
           future: controller.dataReviewTeacher
-              .where('teacher_id', isEqualTo: teacherId)
+              .where('student_id', isEqualTo: studentId)
               .get(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
@@ -542,7 +570,7 @@ class ListItemReviewStudentOfTeacherDetailsPage extends StatelessWidget {
                             width: 10,
                           ),
                           Text(
-                            'تعليقات الطلاب',
+                            '   تعليقات الطلاب على المعلمين',
                             style: TextStyles.font18mainColorBold,
                           ),
                         ],
@@ -559,7 +587,7 @@ class ListItemReviewStudentOfTeacherDetailsPage extends StatelessWidget {
                               mainAxisSpacing: 10,
                               mainAxisExtent: 220),
                           itemBuilder: (context, index) {
-                            return CardItemReviewTeacherPfCoursesDetailsPage(
+                            return CardItemReviewStudentOfStudentDetailsPage(
                               maxWidth: maxWidth,
                               index: index,
                               snapshot: snapshot,
@@ -585,12 +613,12 @@ class ListItemReviewStudentOfTeacherDetailsPage extends StatelessWidget {
   }
 }
 
-class CardItemReviewTeacherPfCoursesDetailsPage extends StatelessWidget {
+class CardItemReviewStudentOfStudentDetailsPage extends StatelessWidget {
   final AsyncSnapshot<QuerySnapshot<Object?>> snapshot;
   final int index;
-  final TeacherController controller;
+  final StudentController controller;
 
-  const CardItemReviewTeacherPfCoursesDetailsPage({
+  const CardItemReviewStudentOfStudentDetailsPage({
     super.key,
     required this.maxWidth,
     required this.snapshot,
@@ -644,6 +672,7 @@ class CardItemReviewTeacherPfCoursesDetailsPage extends StatelessWidget {
                   Text(
                     snapshot.data!.docs[index]['details'],
                     maxLines: 4,
+
                   ),
                 ],
               ),
@@ -651,8 +680,8 @@ class CardItemReviewTeacherPfCoursesDetailsPage extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        minimumSize: Size(maxWidth / 3.4, 40),
-                        maximumSize: Size(maxWidth / 3.4, 40),
+                        minimumSize: Size(maxWidth / 7, 40),
+                        maximumSize: Size(maxWidth / 7, 40),
                         side: BorderSide(
                           color: Colors.red,
                           width: 1,
@@ -661,6 +690,23 @@ class CardItemReviewTeacherPfCoursesDetailsPage extends StatelessWidget {
                     onPressed: () {
                       controller.deleteReview(
                           context, snapshot.data!.docs[index].id);
+                    },
+                  ),
+                  SizedBox(width: 20,),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(maxWidth / 7, 40),
+                        maximumSize: Size(maxWidth / 7, 40),
+                        side: BorderSide(
+                          color: ProjectColors.greenColor,
+                          width: 1,
+                        )),
+                    child: Text('عرض المعلم'),
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (context) {
+                            return TeacherDetails(teacherId: snapshot.data!.docs[index]['teacher_id']);
+                          }));
                     },
                   ),
                 ],

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'view/screen/home.dart';
 import 'view/screen/layout.dart';
+import 'view/screen/student/student_details.dart';
 import 'view/screen/teacher/teacher_details.dart';
 
 void main() async {

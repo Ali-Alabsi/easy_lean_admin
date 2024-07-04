@@ -1,6 +1,6 @@
 import 'package:easy_lean_admin/view/screen/courses/courses.dart';
 import 'package:easy_lean_admin/view/screen/home.dart';
-import 'package:easy_lean_admin/view/screen/student.dart';
+import 'package:easy_lean_admin/view/screen/student/student.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

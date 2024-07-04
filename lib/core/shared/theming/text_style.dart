@@ -90,6 +90,7 @@ class TextStyles {
     fontSize: 18,
     fontWeight: FontWeight.bold,
     color: ProjectColors.blackColor,
+
   );
 
   static TextStyle font14BlackBold = TextStyle(

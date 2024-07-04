@@ -1,4 +1,6 @@
 
+import 'package:easy_lean_admin/view/screen/student/student_details.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../controller/student_controller.dart';
@@ -134,7 +136,10 @@ class CardItemDataStudentInStudentPage extends StatelessWidget {
                     ),
                     child: Text( 'تفاصيل'),
                     onPressed: () {
-
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (context) {
+                            return StudentDetails(studentId:  snapshot.data.docs[index].id);
+                          }));
                     },
                   ),
                 ],

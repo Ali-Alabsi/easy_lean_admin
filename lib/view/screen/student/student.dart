@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controller/student_controller.dart';
-import '../../core/widget/searchAndNameInLayoutPage.dart';
-import '../widget/student_widget/student_widget.dart';
+import '../../../controller/student_controller.dart';
+import '../../../core/widget/searchAndNameInLayoutPage.dart';
+import '../../widget/student_widget/student_widget.dart';
 
 class Student extends StatelessWidget {
   const Student({Key? key}) : super(key: key);
