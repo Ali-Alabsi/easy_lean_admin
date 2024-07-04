@@ -12,7 +12,8 @@ class CoursesDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: LayoutBuilder(
+    return Scaffold(
+        body: LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 1300 && constraints.maxHeight > 600) {
           return Directionality(
@@ -73,7 +74,7 @@ class CoursesDetails extends StatelessWidget {
           return Center(child: Text('حجم الشاشة لا يسمح بعرض التطبيق'));
         }
       },
-    ));
+    )
+    );
   }
 }
-

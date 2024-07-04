@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -117,8 +118,14 @@ class CardItemAppInPojectPage extends StatelessWidget {
                             color: ProjectColors.mainColor,
                             width: 1,
                           )),
-                      child: Text('تفاصيل'),
-                      onPressed: () {},
+                      child: Text('تحميل'),
+                      onPressed: () async {
+                        const url = 'https://firebasestorage.googleapis.com/v0/b/teastlearingapp.appspot.com/o/Note-App-main.zip?alt=media&token=ec4fa457-38f3-4bc2-8db6-5038b026ea8a'; // Replace with your URL
+                        const fileName = 'Note-App-main.zip';
+                         await controller.downloadFile(url, fileName);
+
+
+                      },
                     ),
                   ],
                 ),

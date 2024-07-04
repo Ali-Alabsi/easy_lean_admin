@@ -14,6 +14,7 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoginController controllerPut = Get.put(LoginController());
     return Scaffold(
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -35,59 +36,76 @@ class Login extends StatelessWidget {
                 child: Center(
                   child: Container(
                     margin: EdgeInsetsDirectional.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'تسجيل الدخول',
-                          style: TextStyles.font20mainColorBold,
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        AppTextFormFiled(
-                          hintText: 'رقم المستخدم ',
-                          controller: MyController.emailLogin,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        AppTextFormFiled(
-                          hintText: 'كلمة المرور',
-                          controller: MyController.passwordLogin,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GetBuilder<LoginController>(
-                            init: LoginController(),
-                            builder: (controller) {
-                              return FutureBuilder(
-                                  future: controller.dataAdmin.get(),
-                                  builder: (context, snapshot) {
-                                    return controller.isLoadingLogin ? CircularProgressIndicator():  MainButton(
-                                      name: 'تسجيل الدخول',
-                                      onPressed: () {
-                                        controller.changeLoadingIsTrue();
-                                        for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                                          if (snapshot.data!.docs[i]['id'] == MyController.emailLogin.text &&
-                                              snapshot.data!.docs[i]['password'] ==MyController.passwordLogin.text) {
-                                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Layout()),
-                                                (Route<dynamic> route) => false);
-                                            controller.changeLoadingIsFalse();
-                                            break;
-                                          }
-                                          snackBarDialog(context, 'اسم المستخدم او كلمة المرور خاطئة');
-                                        }
+                    child: Form(
+                      key: controllerPut.loginForm,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'تسجيل الدخول',
+                            style: TextStyles.font20mainColorBold,
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          AppTextFormFiled(
+                            validator: (value){
+                              if (value!.isEmpty) {
+                                return 'الرجاء إدخال رقم المستخدم';
+                              }
+                              return null;
+                            },
+                            hintText: 'رقم المستخدم ',
+                            controller: MyController.emailLogin,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          AppTextFormFiled(
+                            validator: (value){
+                              if (value!.isEmpty) {
+                                return 'الرجاء إدخال كلمة المرور';
+                              }
+                              return null;
+                            },
+                            hintText: 'كلمة المرور',
+                            controller: MyController.passwordLogin,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          GetBuilder<LoginController>(
+                              init: LoginController(),
+                              builder: (controller) {
+                                return FutureBuilder(
+                                    future: controller.dataAdmin.get(),
+                                    builder: (context, snapshot) {
+                                      return controller.isLoadingLogin ? CircularProgressIndicator():  MainButton(
+                                        name: 'تسجيل الدخول',
+                                        onPressed: () {
+                                          if (controllerPut.loginForm.currentState!.validate()) {
+                                            controller.changeLoadingIsTrue();
+                                            for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                                              if (snapshot.data!.docs[i]['id'] == MyController.emailLogin.text &&
+                                                  snapshot.data!.docs[i]['password'] ==MyController.passwordLogin.text) {
+                                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Layout()),
+                                                        (Route<dynamic> route) => false);
+                                                controller.changeLoadingIsFalse();
+                                                break;
+                                              }
+                                              snackBarDialog(context, 'اسم المستخدم او كلمة المرور خاطئة');
+                                            }
 
-                                        controller.changeLoadingIsFalse();
-                                      },
-                                      margin: EdgeInsetsDirectional.zero,
-                                    );
-                                  });
-                            })
-                      ],
+                                            controller.changeLoadingIsFalse();
+                                          }
+                                        },
+                                        margin: EdgeInsetsDirectional.zero,
+                                      );
+                                    });
+                              })
+                        ],
+                      ),
                     ),
                   ),
                 ),

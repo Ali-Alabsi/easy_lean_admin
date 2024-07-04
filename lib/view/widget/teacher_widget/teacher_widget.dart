@@ -4,6 +4,7 @@ import '../../../controller/teacher_controller.dart';
 import '../../../core/shared/color.dart';
 import '../../../core/shared/theming/text_style.dart';
 import '../../../core/widget/image_cache_error.dart';
+import '../../screen/teacher/teacher_details.dart';
 
 class CardItemDataTeacherInTeacherPage extends StatelessWidget {
   final snapshot;
@@ -72,7 +73,10 @@ class CardItemDataTeacherInTeacherPage extends StatelessWidget {
                         )
                     ),
                     child: Text('تفاصيل'),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TeacherDetails(teacherId:  snapshot.data.docs[index].id)));
+                    },
                   ),
                 ],
               ),

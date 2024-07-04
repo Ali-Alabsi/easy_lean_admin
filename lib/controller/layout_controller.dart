@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import '../view/screen/courses/courses_details.dart';
 import '../view/screen/project.dart';
-import '../view/screen/teacher.dart';
+import '../view/screen/teacher/teacher.dart';
 
 class LayoutController extends GetxController{
   int indexScreen =0;

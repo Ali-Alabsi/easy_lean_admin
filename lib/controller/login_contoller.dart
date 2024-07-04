@@ -16,6 +16,8 @@ class LoginController extends GetxController {
     update();
   }
 
+
+
   changeLoadingIsFalse(){
     isLoadingLogin = false;
     update();

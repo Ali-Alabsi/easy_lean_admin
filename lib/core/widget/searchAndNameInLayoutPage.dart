@@ -24,8 +24,12 @@ class SearchAndNameInTopLayoutPage extends StatelessWidget {
                     return Row(
                       children: [
                         Text(
-                          ' مرحبا ${ snapshot.data!['name']}',
+                          ' مرحبا ',
                           style: TextStyles.font16BlackBold,
+                        ),
+                        Text(
+                            snapshot.data!['name'],
+                          style: TextStyles.font16mainColorBold,
                         ),
                         SizedBox(
                           width: 10,

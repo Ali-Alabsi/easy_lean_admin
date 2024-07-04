@@ -13,7 +13,9 @@ class Layout extends StatelessWidget {
     return Scaffold(
         body: LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth > 1300 && constraints.maxHeight > 600) {
+        if (constraints.maxWidth > 1300 && constraints.maxHeight > 615) {
+          final double maxWidth = constraints.maxWidth;
+          final double maxHeight = constraints.maxHeight;
           return Directionality(
             textDirection: TextDirection.rtl,
             child: Container(
