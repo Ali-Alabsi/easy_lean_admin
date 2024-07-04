@@ -1,3 +1,4 @@
+import 'package:easy_lean_admin/view/screen/courses/courses_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,59 +20,67 @@ class CardItemCoursesInHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsetsDirectional.all(5),
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF956CF7),
-              Color(0xFFD276B6),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20)),
-      height: 150,
-      width: 200,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CircleAvatar(
-                radius: 18,
-                child: Icon(
-                  Icons.favorite,
-                  size: 23,
-                ),
-              ),
-              Container(
-                  height: 80,
-                  width: 80,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30)
+    return InkWell(
+      onTap: (){
+        Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CoursesDetails(
+          courseId: snapshot.data.docs[index].id,
+        )));
+      },
+      child: Container(
+        padding: EdgeInsetsDirectional.all(5),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF956CF7),
+                Color(0xFFD276B6),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(20)),
+        height: 150,
+        width: 200,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(
+                  radius: 18,
+                  child: Icon(
+                    Icons.favorite,
+                    size: 23,
                   ),
-                  child: ImageNetworkCache(url: snapshot.data.docs[index].data()['image'],)
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                snapshot.data!.docs[index].data()['name'],
-                style: TextStyles.font14WhiteW500,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
-          ),
-        ],
+                ),
+                Container(
+                    height: 80,
+                    width: 80,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    child: ImageNetworkCache(url: snapshot.data.docs[index].data()['image'],)
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                Text(
+                  snapshot.data!.docs[index].data()['name'],
+                  style: TextStyles.font14WhiteW500,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

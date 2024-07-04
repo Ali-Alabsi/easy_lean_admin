@@ -1,3 +1,4 @@
+import 'package:easy_lean_admin/view/screen/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/layout_controller.dart';
@@ -77,11 +78,11 @@ class NavigationBarInLayoutPage extends StatelessWidget {
                   height: 20,
                 ),
                 ItemCategories(
-                  name: 'الاعدادت',
-                  active: false,
-                  icon: Icons.settings,
-                ),
-                ItemCategories(
+                  onTap: (){
+                    Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(builder: (context) =>Login()),
+                        (route) => false);
+                  },
                   name: 'تسجيل الخروج',
                   active: false,
                   icon: Icons.exit_to_app,
