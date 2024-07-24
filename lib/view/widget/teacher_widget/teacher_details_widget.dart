@@ -301,7 +301,9 @@ class CardItemCoursesOPfTeacherDetailsPage extends StatelessWidget {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                             return CoursesDetails(
-                                courseId: snapshot.data!.docs[index].id);
+                                courseId: snapshot.data!.docs[index].id,
+                                teacherId: snapshot.data!.docs[index]['teacher_id']
+                            );
                           }));
                     },
                   ),

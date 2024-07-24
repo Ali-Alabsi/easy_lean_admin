@@ -25,5 +25,15 @@ class StudentController extends GetxController{
       snackBarDialog(context, ' هناك خطاء لم تتم عملية الحذف');
     });
   }
+  Future<void> updateActive(context, String id, bool active) {
+    return dataStudents
+        .doc(id)
+        .update({'active': active ? false : true}).then((value) {
+      update();
+      return snackBarDialog(context, 'تم العملية بنجاح');
+    }).catchError((error) {
+      return  snackBarDialog(context, 'هناك خطاء لم يتم تنفيذ العملية');
+    });
+  }
 }
 

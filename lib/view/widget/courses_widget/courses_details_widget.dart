@@ -447,13 +447,14 @@ class BasicInfoForCoursesInCourseDetailsPage extends StatelessWidget {
 }
 
 class InfoOfTeacherInCoursesPage extends StatelessWidget {
+  final String teacherId;
   final double width;
   final double height;
 
   const InfoOfTeacherInCoursesPage({
     super.key,
     required this.width,
-    required this.height,
+    required this.height, required this.teacherId,
   });
 
   @override
@@ -462,7 +463,7 @@ class InfoOfTeacherInCoursesPage extends StatelessWidget {
         init: CoursesController(),
         builder: (controller) {
           return FutureBuilder(
-              future: controller.dataTeacher.doc('VgZ6Sp39neyY8MWifDJO').get(),
+              future: controller.dataTeacher.doc(teacherId).get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
@@ -573,7 +574,9 @@ class InfoOfTeacherInCoursesPage extends StatelessWidget {
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }
-              });
+
+              }
+              );
         });
   }
 }

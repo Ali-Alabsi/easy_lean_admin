@@ -1,19 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_lean_admin/controller/course_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import '../../widget/courses_widget/courses_details_widget.dart';
 
 class CoursesDetails extends StatelessWidget {
   final String courseId;
+  final String teacherId;
 
-  const CoursesDetails({Key? key, required this.courseId}) : super(key: key);
+  const CoursesDetails(
+      {Key? key, required this.courseId, required this.teacherId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: LayoutBuilder(
+    return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 1300 && constraints.maxHeight > 600) {
           return Directionality(
@@ -37,13 +41,13 @@ class CoursesDetails extends StatelessWidget {
                             width: 20,
                           ),
                           Expanded(
-                            child: Container(
-                                child: InfoOfTeacherInCoursesPage(
-                              width: maxWidth,
-                              height: maxHeight,
-                            )),
-                            flex: 2,
-                          )
+                              flex: 2,
+                              child: Container(
+                                  child: InfoOfTeacherInCoursesPage(
+                                width: maxWidth,
+                                height: maxHeight,
+                                    teacherId: teacherId,
+                              )))
                         ],
                       ),
                       SizedBox(
@@ -74,7 +78,6 @@ class CoursesDetails extends StatelessWidget {
           return Center(child: Text('حجم الشاشة لا يسمح بعرض التطبيق'));
         }
       },
-    )
-    );
+    ));
   }
 }

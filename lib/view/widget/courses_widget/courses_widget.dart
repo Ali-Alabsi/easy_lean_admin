@@ -86,15 +86,27 @@ class CardItemCoursesInCoursesPage extends StatelessWidget {
                           builder: (controllerLayout) {
                             return InkWell(
                               onTap: () {
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (context) => CoursesDetails(courseId: 'ss',)));
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => CoursesDetails(
+                                              courseId: snapshot.data.docs[index].id,
+                                            teacherId: snapshot.data.docs[index]['teacher_id']
+                                            )));
                               },
                               child: Row(
                                 children: [
                                   InkWell(
-                                    onTap: (){
-                                      Navigator.push(context,
-                                      CupertinoPageRoute(builder: (context) => CoursesDetails(courseId: snapshot.data.docs[index].id,)));
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  CoursesDetails(
+                                                    courseId: snapshot
+                                                        .data.docs[index].id,
+                                                    teacherId: snapshot.data.docs[index]['teacher_id'],
+                                                  )));
                                     },
                                     child: Column(
                                       children: [
@@ -118,17 +130,20 @@ class CardItemCoursesInCoursesPage extends StatelessWidget {
                                       controller.updateActive(
                                           context,
                                           snapshot.data.docs[index].id,
-                                          snapshot.data.docs[index].data()['active']);
+                                          snapshot.data.docs[index]
+                                              .data()['active']);
                                     },
                                     child: Container(
                                       width: 70,
                                       child: Column(
                                         children: [
                                           Text(
-                                            snapshot.data.docs[index].data()['active']
+                                            snapshot.data.docs[index]
+                                                    .data()['active']
                                                 ? 'تقيد'
                                                 : 'فك التقيد',
-                                            style: TextStyles.font16greenColorBold,
+                                            style:
+                                                TextStyles.font16greenColorBold,
                                           ),
                                           Container(
                                             height: 1,
@@ -144,8 +159,8 @@ class CardItemCoursesInCoursesPage extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      controller.deleteCourse(
-                                          context, snapshot.data.docs[index].id);
+                                      controller.deleteCourse(context,
+                                          snapshot.data.docs[index].id);
                                     },
                                     child: Column(
                                       children: [
@@ -164,8 +179,7 @@ class CardItemCoursesInCoursesPage extends StatelessWidget {
                                 ],
                               ),
                             );
-                          }
-                      )
+                          })
                     ],
                   )
                 ],

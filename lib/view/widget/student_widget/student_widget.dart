@@ -51,6 +51,11 @@ class DefineTitleOfTableInStudentPage extends StatelessWidget {
                 )),
             Expanded(
                 child: Text(
+                  'قيد ',
+                  style: TextStyles.font16GreyW400,
+                )),
+            Expanded(
+                child: Text(
                   'حذف ',
                   style: TextStyles.font16GreyW400,
                 )),
@@ -140,6 +145,28 @@ class CardItemDataStudentInStudentPage extends StatelessWidget {
                           CupertinoPageRoute(builder: (context) {
                             return StudentDetails(studentId:  snapshot.data.docs[index].id);
                           }));
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(140, 40),
+                        maximumSize: Size(140, 40),
+                        side: BorderSide(
+                          color: Colors.green,
+                          width: 1,
+                        )
+                    ),
+                    child: Text( snapshot.data.docs[index].data()['active']
+                        ? 'تقيد'
+                        : 'فك التقيد',),
+                    onPressed: () {
+                      controller.updateActive(context,   snapshot.data.docs[index].id,   snapshot.data.docs[index].data()['active']);
                     },
                   ),
                 ],

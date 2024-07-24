@@ -40,10 +40,10 @@ class ListItemTeacherInDetailsStudentPage extends StatelessWidget {
                               itemBuilder: (context,i){
                                 return FutureBuilder(
                                     future: controller.dataTeacher.doc(snapshotTeacher.data!.docs[i]['teacher_id']).get(),
-                                    builder: (context ,snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.done) {
-                                        if (snapshot.hasData) {
-                                          return CardItemTeacherInDetailsStudentPage(snapshot: snapshot,index: i,);
+                                    builder: (context ,snapshotViewTeacher) {
+                                      if (snapshotViewTeacher.connectionState == ConnectionState.done) {
+                                        if (snapshotViewTeacher.hasData) {
+                                          return CardItemTeacherInDetailsStudentPage(snapshot: snapshotViewTeacher,index: i,);
                                         } else {
                                           return Center(child: CircularProgressIndicator());
                                         }
@@ -72,7 +72,7 @@ class ListItemTeacherInDetailsStudentPage extends StatelessWidget {
 }
 
 class CardItemTeacherInDetailsStudentPage extends StatelessWidget {
-  final AsyncSnapshot<DocumentSnapshot<Object?>> snapshot;
+  final  snapshot;
   final int index;
   const CardItemTeacherInDetailsStudentPage({
     super.key,required this.snapshot, required this.index,
@@ -87,42 +87,50 @@ class CardItemTeacherInDetailsStudentPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Container(
-                    height: 80,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: ProjectColors.mainColor,
-                        borderRadius:
-                        BorderRadius.circular(10)),
-                    child: ImageNetworkCache(url:  snapshot.data!['image'])),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      snapshot.data!['name'],
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyles.font16mainColorBold,
+            Expanded(
+              child: Row(
+                children: [
+                  Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: ProjectColors.mainColor,
+                          borderRadius:
+                          BorderRadius.circular(10)),
+                      child:
+                      ImageNetworkCache(url:  snapshot.data!['image']
+                      )),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          snapshot.data!['name'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.font16mainColorBold,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          snapshot.data!['email'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.font16GreyW400,
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      snapshot.data!['email'],
-                      style: TextStyles.font16GreyW400,
-                    ),
-                  ],
-                ),
-                SizedBox(width: 15,),
-              ],
+                  ),
+                  SizedBox(width: 15,),
+                ],
+              ),
             ),
             InkWell(
               onTap: (){
@@ -317,7 +325,9 @@ class CardItemCoursesOPfTeacherDetailsPage extends StatelessWidget {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                       return CoursesDetails(
-                                          courseId: snapshot.data!.id);
+                                          courseId: snapshot.data!.id,
+                                          teacherId: snapshot.data!['teacher_id']
+                                      );
                                     }));
                               },
                             ),

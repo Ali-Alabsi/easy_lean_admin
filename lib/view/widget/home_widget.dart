@@ -21,11 +21,14 @@ class CardItemCoursesInHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CoursesDetails(
-          courseId: snapshot.data.docs[index].id,
-        )));
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CoursesDetails(
+                      courseId: snapshot.data.docs[index].id,
+                    teacherId: snapshot.data.docs[index]['teacher_id']
+                    )));
       },
       child: Container(
         padding: EdgeInsetsDirectional.all(5),
@@ -59,11 +62,11 @@ class CardItemCoursesInHomePage extends StatelessWidget {
                     height: 80,
                     width: 80,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30)
-                    ),
-                    child: ImageNetworkCache(url: snapshot.data.docs[index].data()['image'],)
-                ),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                    child: ImageNetworkCache(
+                      url: snapshot.data.docs[index].data()['image'],
+                    )),
               ],
             ),
             Column(
@@ -107,11 +110,18 @@ class ListAppInHomePage extends StatelessWidget {
                         width: 1000,
                         child: ListView.separated(
                             scrollDirection: Axis.horizontal,
-                            itemBuilder: (context,index){
-                              return CardItemAppInHomePage(index: index,snapshot: snapshot,);
-                            }, separatorBuilder: (context ,index){
-                          return SizedBox(width: 20,);
-                        }, itemCount: snapshot.data!.docs.length),
+                            itemBuilder: (context, index) {
+                              return CardItemAppInHomePage(
+                                index: index,
+                                snapshot: snapshot,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                width: 20,
+                              );
+                            },
+                            itemCount: snapshot.data!.docs.length),
                       );
                     } else {
                       return Text('لا يوجد تطبيقات  ');
@@ -122,18 +132,19 @@ class ListAppInHomePage extends StatelessWidget {
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }
-              }
-          );
-        }
-    );
+              });
+        });
   }
 }
 
 class CardItemAppInHomePage extends StatelessWidget {
   final snapshot;
   final int index;
+
   const CardItemAppInHomePage({
-    super.key,required this.snapshot, required this.index,
+    super.key,
+    required this.snapshot,
+    required this.index,
   });
 
   @override
@@ -143,8 +154,7 @@ class CardItemAppInHomePage extends StatelessWidget {
       width: 300,
       decoration: BoxDecoration(
           color: ProjectColors.greyColor300,
-          borderRadius: BorderRadius.circular(20)
-      ),
+          borderRadius: BorderRadius.circular(20)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,18 +162,23 @@ class CardItemAppInHomePage extends StatelessWidget {
           Container(
               height: 50,
               width: 50,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25)
-              ),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(25)),
               clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: ImageNetworkCache(url: snapshot.data.docs[index].data()['image'][0],)
+              child: ImageNetworkCache(
+                url: snapshot.data.docs[index].data()['image'][0],
+              )),
+          Text(
+            snapshot.data.docs[index].data()['name'],
+            style: TextStyles.font20BlackBold,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          Text(snapshot.data.docs[index].data()['name'], style: TextStyles.font20BlackBold,),
           Text(
             snapshot.data.docs[index].data()['details'],
-            overflow:TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis,
             style: TextStyles.font14GreyW500,
-            maxLines: 5,
+            maxLines: 4,
           )
         ],
       ),
@@ -183,7 +198,7 @@ class infoOfUserInHomePage extends StatelessWidget {
         builder: (controller) {
           return FutureBuilder(
               future: controller.dataAdmin.doc('8ngYJqerj9rG64MhzsfR').get(),
-              builder: (context,snapshot){
+              builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -194,15 +209,16 @@ class infoOfUserInHomePage extends StatelessWidget {
                               margin: EdgeInsetsDirectional.only(top: 50),
                               height: 220,
                               width: 250,
-
                               decoration: BoxDecoration(
                                 color: ProjectColors.greyColor300,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Container(
-                                padding: EdgeInsetsDirectional.symmetric(vertical: 10),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                    vertical: 10),
                                 child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         children: [
@@ -220,17 +236,20 @@ class infoOfUserInHomePage extends StatelessWidget {
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                         children: [
                                           Column(
                                             children: [
                                               Text(
                                                 'number',
-                                                style: TextStyles.font14GreyW300,
+                                                style:
+                                                    TextStyles.font14GreyW300,
                                               ),
                                               Text(
                                                 snapshot.data!['id'],
-                                                style: TextStyles.font18BlackBold,
+                                                style:
+                                                    TextStyles.font18BlackBold,
                                               )
                                             ],
                                           ),
@@ -243,11 +262,13 @@ class infoOfUserInHomePage extends StatelessWidget {
                                             children: [
                                               Text(
                                                 'work',
-                                                style: TextStyles.font14GreyW300,
+                                                style:
+                                                    TextStyles.font14GreyW300,
                                               ),
                                               Text(
                                                 snapshot.data!['work'],
-                                                style: TextStyles.font18BlackBold,
+                                                style:
+                                                    TextStyles.font18BlackBold,
                                               )
                                             ],
                                           ),
@@ -263,35 +284,29 @@ class infoOfUserInHomePage extends StatelessWidget {
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   decoration: BoxDecoration(
                                       color: ProjectColors.mainColor,
-                                      borderRadius: BorderRadius.circular(50)
-                                  ),
+                                      borderRadius: BorderRadius.circular(50)),
                                   child: ImageNetworkCache(
                                     url: snapshot.data!['image'],
-                                  )
-                              ),
+                                  )),
                               top: 0,
                               left: 70,
                             ),
                           ],
                         );
-
                       } else {
                         return Center(child: CircularProgressIndicator());
                       }
                     } else {
                       return Center(child: CircularProgressIndicator());
                     }
-
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }
-              }
-          );
-        }
-    );
+              });
+        });
   }
 }
 
@@ -336,9 +351,7 @@ class ListCoursesInlayoutPage extends StatelessWidget {
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }
-              }
-          );
+              });
         });
   }
 }
-
